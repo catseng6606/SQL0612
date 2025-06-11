@@ -1,0 +1,38 @@
+services:
+  www:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - ./www:/var/www/html
+    links:
+      - db
+    networks:
+      - default
+  db:
+    image: mysql:latest
+    ports:
+      - "8081:3306"
+    environment:      
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password      
+      MYSQL_ROOT_PASSWORD: password
+    # 在 container 啟動時，會將 ./mysql 目錄中的檔案複製到 /docker-entrypoint-initdb.d 目錄下
+    # 這個目錄下的檔案，會在 MySQL啟動時被執行
+    # 可以將資料庫的schema和數據dump到這個目錄下
+    # 例如：mysqldump -u root -p --all-databases > ./mysql/all-databases.sql
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
+    networks:
+      - default
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    links:
+      - db:db
+    ports:
+      - "8082:80"
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password      
+      MYSQL_ROOT_PASSWORD: password
