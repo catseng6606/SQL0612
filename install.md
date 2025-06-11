@@ -64,3 +64,9 @@ COMPOSE_BAKE=true docker-compose up -d
 ``` bash
 sudo vmhgfs-fuse .host:/ /media -o allow_other
 ```
+
+### 到 Kali 的 /media/{share目錄}
+``` bash
+cd /media/{share目錄}
+git clone https://github.com/catseng6606/SQL0612
+```
